@@ -3,7 +3,7 @@
 <h3>ENTER YOUR NAME: N Preethika</h3>
 <h3>ENTER YOUR REGISTER NO: 212223040130</h3>
 <h3>EX. NO: 06</h3>
-<h3>DATE: 28/10/2025</h3>
+<h3>DATE: 29/10/2025</h3>
 <h1> <align=center> MATRIX TRANSPOSITION USING SHARED MEMORY </h3>
   Implement Matrix transposition using GPU Shared memory.</h3>
 
@@ -318,6 +318,7 @@ int main(int argc, char **argv)
 {
     // set up device
     int dev = 0;
+    double iStart,iElaps;
     cudaDeviceProp deviceProp;
     CHECK(cudaGetDeviceProperties(&deviceProp, dev));
     printf("%s at ", argv[0]);
@@ -344,10 +345,11 @@ int main(int argc, char **argv)
     printf("<<< grid (%d,%d) block (%d,%d)>>>\n", grid.x, grid.y, block.x,
             block.y);
 
-    double iStart,iElaps;
+   // double iStart,iElaps;
 
     // allocate device memory
     int *d_C;
+    iStart=seconds();
     CHECK(cudaMalloc((int**)&d_C, nBytes));
     int *gpuRef  = (int *)malloc(nBytes);
 
@@ -392,6 +394,8 @@ CHECK(cudaMemset(d_C, 0, nBytes));
     CHECK(cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost));
 
     if(iprintf)  printData("setRowReadColDynPad ", gpuRef, nx * ny);
+    iElaps=seconds()-iStart;
+    printf("Elapsed time %f sec: \n", iElaps);
 
     // free host and device memory
     CHECK(cudaFree(d_C));
@@ -401,8 +405,9 @@ CHECK(cudaMemset(d_C, 0, nBytes));
     CHECK(cudaDeviceReset());
     return EXIT_SUCCESS;
 }
+
 ```
-Overwriting mattranpose.cu
+Writing mattranpose.cu
 
 ```
 !nvcc -arch=sm_75 mattranpose.cu -o mattran
@@ -413,12 +418,15 @@ Overwriting mattranpose.cu
 
 ## OUTPUT:
 
-<img width="1161" height="652" alt="image" src="https://github.com/user-attachments/assets/62ebc4c1-d115-4bd5-8c2c-bef31ee4f18c" />
-<img width="1032" height="663" alt="image" src="https://github.com/user-attachments/assets/a6bd339f-d31e-4539-838b-11529ae8e692" />
-<img width="1748" height="670" alt="image" src="https://github.com/user-attachments/assets/e76be6d9-44b8-46a8-86a6-4e9a926f017c" />
-<img width="1112" height="649" alt="image" src="https://github.com/user-attachments/assets/873e0ca4-b3f7-47ae-89f9-51d340f60fa2" />
+<img width="1032" height="653" alt="image" src="https://github.com/user-attachments/assets/151bcf40-fc23-481b-8dd4-b21329288d80" />
+<img width="1027" height="660" alt="image" src="https://github.com/user-attachments/assets/20ea3fe1-313b-453e-bb37-be3749184c1a" />
+<img width="1689" height="608" alt="image" src="https://github.com/user-attachments/assets/0dfe3c61-f290-410d-ab3b-af64c1e938d5" />
+<img width="1080" height="668" alt="image" src="https://github.com/user-attachments/assets/c469cd29-d13f-41a5-8f7f-05379f8c55cb" />
+<img width="1710" height="707" alt="image" src="https://github.com/user-attachments/assets/41aa2d52-2f66-4ef6-8daa-95552afe75d6" />
+<img width="1678" height="422" alt="image" src="https://github.com/user-attachments/assets/5a9168e1-f2d0-41c9-bbce-f4d78cb1fb8c" />
+
 
 
 
 ## RESULT:
-Thus the program has been executed by using CUDA to transpose a matrix. It is observed that there are variations shared memory and global memory implementation. The elapsed times are recorded as _______________.
+Thus the program has been executed by using CUDA to transpose a matrix. It is observed that there are variations shared memory and global memory implementation. The elapsed times are recorded as 0.004919 sec.
